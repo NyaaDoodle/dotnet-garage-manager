@@ -45,6 +45,8 @@
     <Compile Include="Vehicles\Vehicle.cs" />
     <Compile Include="Vehicles\Wheel.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
