@@ -16,7 +16,10 @@
         private const float k_CurrentFuelAmountDefaultValue = 0;
         private const float k_MaximumAllowedFuelAmountDefaultValue = 0;
 
-        public GasolineFuelTank(eFuelType i_FuelType, float 
+        public GasolineFuelTank()
+        {
+
+        }
 
         public void FuelUp(int i_FuelAmountToAdd, GasolineFuelTank.eFuelType i_FuelTypeToAdd)
         {
