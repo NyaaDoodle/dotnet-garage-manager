@@ -1,8 +1,10 @@
-﻿namespace Ex03.GarageLogic.Vehicles
+﻿using System.Collections.Generic;
+
+namespace Ex03.GarageLogic.Vehicles
 {
-    public class Car
+    internal class Car : Vehicle
     {
-        public enum eColor
+        internal enum eColor : byte
         {
             Black,
             White,
@@ -10,9 +12,40 @@
             Blue
         }
 
-        public eColor Color { get; set; } = k_ColorDefaultValue;
-        public int DoorCount { get; set; } = k_DoorCountDefaultValue;
-        private const eColor k_ColorDefaultValue = eColor.Black;
-        private const int k_DoorCountDefaultValue = 0;
+        public eColor? Color { get; set; }
+        public int DoorCount { get; set; }
+        private const int k_MinimumDoorCount = 0;
+        
+        public Car()
+        {
+            const int k_DefaultDoorCount = k_MinimumDoorCount;
+
+            Color = null;
+            DoorCount = k_DefaultDoorCount;
+            Wheels = getInitialCarWheels();
+        }
+
+        private static LinkedList<Wheel> getInitialCarWheels()
+        {
+            const int k_CarWheelCount = 5;
+            LinkedList<Wheel> carWheels = new LinkedList<Wheel>();
+
+            for (int i = 0; i < k_CarWheelCount; i++)
+            {
+                carWheels.AddLast(getNewCarWheel());
+            }
+
+            return carWheels;
+        }
+
+        private static Wheel getNewCarWheel()
+        {
+            const float k_CarWheelMaximumAirPressureLevel = 34;
+            Wheel carWheel = new Wheel();
+
+            carWheel.MaximumAirPressureLevel = k_CarWheelMaximumAirPressureLevel;
+
+            return carWheel;
+        }
     }
 }

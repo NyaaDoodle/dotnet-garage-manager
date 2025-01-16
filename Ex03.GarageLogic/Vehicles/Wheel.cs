@@ -7,7 +7,7 @@ namespace Ex03.GarageLogic.Vehicles
         public string ManufacturerName { get; set; }
         public float CurrentAirPressureLevel { get; private set; }
         public float MaximumAirPressureLevel { get; set; }
-        private const int k_MinimumAirPressureLevel = 0;
+        private const float k_MinimumAirPressureLevel = 0;
 
         public Wheel()
         {
@@ -20,12 +20,6 @@ namespace Ex03.GarageLogic.Vehicles
             MaximumAirPressureLevel = k_DefaultMaximumAirPressureLevel;
         }
 
-        public Wheel(int i_MaximumAirPressureLevel)
-            : this()
-        {
-            MaximumAirPressureLevel = i_MaximumAirPressureLevel;
-        }
-
         public void Inflate(float i_AirPressureToAdd)
         {
             float newAirPressureLevel = CurrentAirPressureLevel + i_AirPressureToAdd;
@@ -36,12 +30,17 @@ namespace Ex03.GarageLogic.Vehicles
             }
             else
             { 
-                ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
-
-                valueOutOfRangeException.MinValue = k_MinimumAirPressureLevel;
-                valueOutOfRangeException.MaxValue = MaximumAirPressureLevel;
-                throw valueOutOfRangeException;
+                throwExceptionForExceedingMaximumAirPressure();
             }
+        }
+
+        private void throwExceptionForExceedingMaximumAirPressure()
+        {
+            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+
+            valueOutOfRangeException.MinValue = k_MinimumAirPressureLevel;
+            valueOutOfRangeException.MaxValue = MaximumAirPressureLevel;
+            throw valueOutOfRangeException;
         }
     }
 }

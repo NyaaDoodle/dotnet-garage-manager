@@ -8,12 +8,13 @@ namespace Ex03.GarageLogic.Vehicles
         public string RegistrationPlateId { get; set; }
         public float EnergyRemainingPercentage { get; set; }
         public ICollection<Wheel> Wheels { get; set; }
+        private const float k_MinimumEnergyRemainingPercentage = 0;
 
         public Vehicle()
         {
             const string k_DefaultModelName = null;
             const string k_DefaultRegistrationPlateId = null;
-            const float k_DefaultEnergyRemainingPercentage = 0;
+            const float k_DefaultEnergyRemainingPercentage = k_MinimumEnergyRemainingPercentage;
             const ICollection<Wheel> k_DefaultWheelsValue = null;
 
             ModelName = k_DefaultModelName;

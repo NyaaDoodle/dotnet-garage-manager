@@ -7,42 +7,51 @@ namespace Ex03.GarageLogic.Vehicles
         public bool IsDeliveringWithRefrigeration { get; set; }
         public float TruckloadVolume { get; set; }
         public GasolineFuelTank FuelTank { get; set; }
+        private const float k_MinimumTruckloadVolume = 0;
         
         public Truck()
         {
             const bool k_IsDeliveringWithRefrigerationDefaultValue = false;
-            const float k_DefaultTruckloadVolume = 0;
+            const float k_DefaultTruckloadVolume = k_MinimumTruckloadVolume;
 
             IsDeliveringWithRefrigeration = k_IsDeliveringWithRefrigerationDefaultValue;
             TruckloadVolume = k_DefaultTruckloadVolume;
-            Wheels = getTruckWheels();
-            FuelTank = getTruckFuelTank();
+            Wheels = getInitialTruckWheels();
+            FuelTank = getInitialTruckFuelTank();
         }
 
-        private static LinkedList<Wheel> getTruckWheels()
+        private static LinkedList<Wheel> getInitialTruckWheels()
         {
             const int k_TruckWheelCount = 12;
-            const int k_TruckWheelMaximumAirPressure = 29;
             LinkedList<Wheel> truckWheels = new LinkedList<Wheel>();
 
             for (int i = 0; i < k_TruckWheelCount; i++)
             {
-                truckWheels.AddLast(new Wheel(k_TruckWheelMaximumAirPressure));
-                truckWheels.Last.Value.MaximumAirPressureLevel = k_TruckWheelMaximumAirPressure;
+                truckWheels.AddLast(getNewTruckWheel());
 
             }
 
             return truckWheels;
         }
 
-        private static GasolineFuelTank getTruckFuelTank()
+        private static Wheel getNewTruckWheel()
+        {
+            const float k_TruckWheelMaximumAirPressureLevel = 29;
+            Wheel truckWheel = new Wheel();
+
+            truckWheel.MaximumAirPressureLevel = k_TruckWheelMaximumAirPressureLevel;
+
+            return truckWheel;
+        }
+
+        private static GasolineFuelTank getInitialTruckFuelTank()
         {
             const GasolineFuelTank.eFuelType k_TruckFuelType = GasolineFuelTank.eFuelType.Soler;
-            const float k_TruckMaximumFuelAmount = 125;
+            const float k_TruckMaximumFuelAmountInLiters = 125;
             GasolineFuelTank truckFuelTank = new GasolineFuelTank();
 
-            truckFuelTank.FuelType = k_TruckFuelType;
-            truckFuelTank.MaximumFuelAmountInLiters = k_TruckMaximumFuelAmount;
+            truckFuelTank.FuelTypeInTank = k_TruckFuelType;
+            truckFuelTank.MaximumFuelAmountInLiters = k_TruckMaximumFuelAmountInLiters;
 
             return truckFuelTank;
         }

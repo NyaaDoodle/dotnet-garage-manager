@@ -1,7 +1,22 @@
 ﻿namespace Ex03.GarageLogic.Vehicles
 {
-    public class ElectricMotorcycle : Motorcycle
+    internal class ElectricMotorcycle : Motorcycle
     {
-        public ElectricVehicleBattery Battery { get; set; } = new ElectricVehicleBattery();
+        public ElectricVehicleBattery Battery { get; set; }
+
+        public ElectricMotorcycle()
+        {
+            Battery = getInitialMotorcycleBattery();
+        }
+
+        private static ElectricVehicleBattery getInitialMotorcycleBattery()
+        {
+            const float k_MotorcycleMaximumChargeTimeInHours = 2.9f;
+            ElectricVehicleBattery motorcycleBattery = new ElectricVehicleBattery();
+
+            motorcycleBattery.MaximumChargeTimeInHours = k_MotorcycleMaximumChargeTimeInHours;
+
+            return motorcycleBattery;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Ex03.GarageLogic.Exceptions;
+﻿using System;
+using Ex03.GarageLogic.Exceptions;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -12,17 +13,17 @@ namespace Ex03.GarageLogic.Vehicles
             Soler
         }
 
-        public eFuelType? FuelType { get; set; }
+        public eFuelType? FuelTypeInTank { get; set; }
         public float CurrentFuelAmountInLiters { get; private set; }
         public float MaximumFuelAmountInLiters { get; set; }
         private const float k_MinimumFuelAmountInLiters = 0;
 
         public GasolineFuelTank()
         {
-            const float k_DefaultCurrentFuelAmount = 0;
-            const float k_DefaultMaximumFuelAmount = 0;
+            const float k_DefaultCurrentFuelAmount = k_MinimumFuelAmountInLiters;
+            const float k_DefaultMaximumFuelAmount = k_MinimumFuelAmountInLiters;
 
-            FuelType = null;
+            FuelTypeInTank = null;
             CurrentFuelAmountInLiters = k_DefaultCurrentFuelAmount;
             MaximumFuelAmountInLiters = k_DefaultMaximumFuelAmount;
         }
@@ -34,16 +35,21 @@ namespace Ex03.GarageLogic.Vehicles
             if (newFuelAmount <= MaximumFuelAmountInLiters)
             {
                 CurrentFuelAmountInLiters = newFuelAmount;
-                FuelType = i_FuelTypeToAdd;
+                FuelTypeInTank = i_FuelTypeToAdd;
             }
             else
             {
-                ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
-
-                valueOutOfRangeException.MinValue = k_MinimumFuelAmountInLiters;
-                valueOutOfRangeException.MaxValue = MaximumFuelAmountInLiters;
-                throw valueOutOfRangeException;
+                throwExceptionForExceedingMaximumFuelAmount();
             }
+        }
+
+        private void throwExceptionForExceedingMaximumFuelAmount()
+        {
+            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+
+            valueOutOfRangeException.MinValue = k_MinimumFuelAmountInLiters;
+            valueOutOfRangeException.MaxValue = MaximumFuelAmountInLiters;
+            throw valueOutOfRangeException;
         }
     }
 }

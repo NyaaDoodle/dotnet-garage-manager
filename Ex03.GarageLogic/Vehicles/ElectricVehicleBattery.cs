@@ -1,15 +1,43 @@
-﻿namespace Ex03.GarageLogic.Vehicles
+﻿using Ex03.GarageLogic.Exceptions;
+
+namespace Ex03.GarageLogic.Vehicles
 {
-    public class ElectricVehicleBattery
+    internal class ElectricVehicleBattery
     {
-        public float ChargeTimeLeft { get; set; } = k_ChargeTimeLeftDefaultValue;
-        public float MaximumChargeTime { get; set; } = k_MaximumChargeTimeDefaultValue;
-        private const float k_ChargeTimeLeftDefaultValue = 0;
-        private const float k_MaximumChargeTimeDefaultValue = 0;
+        public float ChargeTimeLeftInHours { get; private set; }
+        public float MaximumChargeTimeInHours { get; set; }
+        private const float k_MinimumChargeTimeInHours = 0;
 
-        public void Charge(int i_ChargeTimeToAdd)
+        public ElectricVehicleBattery()
         {
+            const float k_DefaultChargeTimeLeftInHours = k_MinimumChargeTimeInHours;
+            const float k_DefaultMaximumChargeTimeInHours = k_MinimumChargeTimeInHours;
 
+            ChargeTimeLeftInHours = k_DefaultChargeTimeLeftInHours;
+            MaximumChargeTimeInHours = k_DefaultMaximumChargeTimeInHours;
+        }
+
+        public void Charge(float i_ChargeTimeToAddInHours)
+        {
+            float newChargeTimeLeftInHours = ChargeTimeLeftInHours + i_ChargeTimeToAddInHours;
+
+            if (newChargeTimeLeftInHours <= MaximumChargeTimeInHours)
+            {
+                ChargeTimeLeftInHours = newChargeTimeLeftInHours;
+            }
+            else
+            {
+                throwExceptionForExceedingMaximumChargeTime();
+            }
+        }
+
+        private void throwExceptionForExceedingMaximumChargeTime()
+        {
+            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+            
+            valueOutOfRangeException.MinValue = k_MinimumChargeTimeInHours;
+            valueOutOfRangeException.MaxValue = MaximumChargeTimeInHours;
+            throw valueOutOfRangeException;
         }
     }
 }
