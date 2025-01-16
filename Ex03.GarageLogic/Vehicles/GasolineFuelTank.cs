@@ -1,8 +1,8 @@
 ﻿namespace Ex03.GarageLogic.Vehicles
 {
-    public class GasolineFuelTank
+    internal class GasolineFuelTank
     {
-        public enum eFuelType
+        internal enum eFuelType
         {
             Octan95,
             Octan96,
@@ -10,10 +10,13 @@
             Soler
         }
 
+        public eFuelType FuelType { get; set; }
         public float CurrentFuelAmountInLiters { get; set; } = k_CurrentFuelAmountDefaultValue;
         public float MaximumAllowedFuelAmountInLiters { get; set; } = k_MaximumAllowedFuelAmountDefaultValue;
         private const float k_CurrentFuelAmountDefaultValue = 0;
         private const float k_MaximumAllowedFuelAmountDefaultValue = 0;
+
+        public GasolineFuelTank(eFuelType i_FuelType, float 
 
         public void FuelUp(int i_FuelAmountToAdd, GasolineFuelTank.eFuelType i_FuelTypeToAdd)
         {
