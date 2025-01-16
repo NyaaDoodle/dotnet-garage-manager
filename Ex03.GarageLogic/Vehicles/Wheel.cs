@@ -29,6 +29,7 @@ namespace Ex03.GarageLogic.Vehicles
         public void Inflate(float i_AirPressureToAdd)
         {
             float newAirPressureLevel = CurrentAirPressureLevel + i_AirPressureToAdd;
+
             if (newAirPressureLevel <= MaximumAirPressureLevel)
             { 
                 CurrentAirPressureLevel = newAirPressureLevel;
@@ -36,9 +37,9 @@ namespace Ex03.GarageLogic.Vehicles
             else
             { 
                 ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+
                 valueOutOfRangeException.MinValue = k_MinimumAirPressureLevel;
                 valueOutOfRangeException.MaxValue = MaximumAirPressureLevel;
-                
                 throw valueOutOfRangeException;
             }
         }
