@@ -46,11 +46,10 @@ namespace Ex03.GarageLogic.Vehicles
 
         private static GasolineFuelTank getInitialTruckFuelTank()
         {
-            const GasolineFuelTank.eFuelType k_TruckFuelType = GasolineFuelTank.eFuelType.Soler;
+            const eFuelType k_TruckFuelType = eFuelType.Soler;
             const float k_TruckMaximumFuelAmountInLiters = 125;
-            GasolineFuelTank truckFuelTank = new GasolineFuelTank();
+            GasolineFuelTank truckFuelTank = new GasolineFuelTank(k_TruckFuelType);
 
-            truckFuelTank.FuelTypeInTank = k_TruckFuelType;
             truckFuelTank.MaximumFuelAmountInLiters = k_TruckMaximumFuelAmountInLiters;
 
             return truckFuelTank;

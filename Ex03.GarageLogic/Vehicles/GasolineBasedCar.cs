@@ -12,11 +12,10 @@
         private static GasolineFuelTank getInitialCarFuelTank()
         {
             const float k_CarMaximumFuelAmountInLiters = 52;
-            const GasolineFuelTank.eFuelType k_CarFuelType = GasolineFuelTank.eFuelType.Octan95;
-            GasolineFuelTank carFuelTank = new GasolineFuelTank();
+            const eFuelType k_CarFuelType = eFuelType.Octan95;
+            GasolineFuelTank carFuelTank = new GasolineFuelTank(k_CarFuelType);
 
             carFuelTank.MaximumFuelAmountInLiters = k_CarMaximumFuelAmountInLiters;
-            carFuelTank.FuelTypeInTank = k_CarFuelType;
 
             return carFuelTank;
         }

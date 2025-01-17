@@ -5,41 +5,41 @@ namespace Ex03.GarageLogic.Vehicles
 {
     internal class GasolineFuelTank
     {
-        internal enum eFuelType : byte
-        {
-            Octan95,
-            Octan96,
-            Octan98,
-            Soler
-        }
-
-        public eFuelType? FuelTypeInTank { get; set; }
+        public eFuelType FuelTypeInTank { get; }
         public float CurrentFuelAmountInLiters { get; private set; }
         public float MaximumFuelAmountInLiters { get; set; }
         private const float k_MinimumFuelAmountInLiters = 0;
 
-        public GasolineFuelTank()
+        public GasolineFuelTank(eFuelType i_FuelTankInTank)
         {
             const float k_DefaultCurrentFuelAmount = k_MinimumFuelAmountInLiters;
             const float k_DefaultMaximumFuelAmount = k_MinimumFuelAmountInLiters;
 
-            FuelTypeInTank = null;
+            FuelTypeInTank = i_FuelTankInTank;
             CurrentFuelAmountInLiters = k_DefaultCurrentFuelAmount;
             MaximumFuelAmountInLiters = k_DefaultMaximumFuelAmount;
         }
 
-        public void FuelUp(float i_FuelAmountToAdd, eFuelType i_FuelTypeToAdd)
+        public void FuelUp(float i_FuelAmountToAdd, eFuelType i_FuelType)
         {
             float newFuelAmount = CurrentFuelAmountInLiters + i_FuelAmountToAdd;
+            bool isCorrectFuelType = FuelTypeInTank == i_FuelType;
+            bool isFuelAmountExceedsMaximumFuelAmount = newFuelAmount > MaximumFuelAmountInLiters;
 
-            if (newFuelAmount <= MaximumFuelAmountInLiters)
+            if (isCorrectFuelType)
             {
-                CurrentFuelAmountInLiters = newFuelAmount;
-                FuelTypeInTank = i_FuelTypeToAdd;
+                if (!isFuelAmountExceedsMaximumFuelAmount)
+                {
+                    CurrentFuelAmountInLiters = newFuelAmount;
+                }
+                else
+                {
+                    throwExceptionForExceedingMaximumFuelAmount();
+                }
             }
             else
             {
-                throwExceptionForExceedingMaximumFuelAmount();
+                throwExceptionForIncorrectFuelType(i_FuelType);
             }
         }
 
@@ -50,6 +50,13 @@ namespace Ex03.GarageLogic.Vehicles
             valueOutOfRangeException.MinValue = k_MinimumFuelAmountInLiters;
             valueOutOfRangeException.MaxValue = MaximumFuelAmountInLiters;
             throw valueOutOfRangeException;
+        }
+
+        private void throwExceptionForIncorrectFuelType(eFuelType i_SuppliedFuelType)
+        {
+            string incorrectFuelTypeMessage =
+                $"Fuel tank expects {FuelTypeInTank.ToString()}, received {i_SuppliedFuelType} instead.";
+            throw new ArgumentException(incorrectFuelTypeMessage);
         }
     }
 }

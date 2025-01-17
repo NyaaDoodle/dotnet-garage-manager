@@ -12,11 +12,10 @@
         private static GasolineFuelTank getInitialMotorcycleFuelTank()
         {
             const float k_MotorcycleMaximumFuelAmountInLiters = 6.2f;
-            const GasolineFuelTank.eFuelType k_MotorcycleFuelType = GasolineFuelTank.eFuelType.Octan98;
-            GasolineFuelTank motorcycleFuelTank = new GasolineFuelTank();
+            const eFuelType k_MotorcycleFuelType = eFuelType.Octan98;
+            GasolineFuelTank motorcycleFuelTank = new GasolineFuelTank(k_MotorcycleFuelType);
 
             motorcycleFuelTank.MaximumFuelAmountInLiters = k_MotorcycleMaximumFuelAmountInLiters;
-            motorcycleFuelTank.FuelTypeInTank = k_MotorcycleFuelType;
 
             return motorcycleFuelTank;
         }
