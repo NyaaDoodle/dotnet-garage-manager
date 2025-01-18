@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Ex03.GarageLogic.Exceptions;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -12,9 +13,29 @@ namespace Ex03.GarageLogic.Vehicles
             B2
         }
 
-        public eLicenseClass? LicenseClass { get; set; }
-        public int EngineVolumeInCubicCentimeters { get; set; }
+        private int m_EngineVolumeInCubicCentimeters;
         private const int k_MinimumEngineVolumeInCubicCentimeters = 0;
+
+        public eLicenseClass? LicenseClass { get; set; }
+
+        public int EngineVolumeInCubicCentimeters
+        {
+            get
+            {
+                return m_EngineVolumeInCubicCentimeters;
+            }
+            set
+            {
+                if (value >= k_MinimumEngineVolumeInCubicCentimeters)
+                {
+                    m_EngineVolumeInCubicCentimeters = value;
+                }
+                else
+                {
+                    throwExceptionForEngineVolumeOutOfRange();
+                }
+            }
+        }
 
         public Motorcycle()
         {
@@ -46,6 +67,14 @@ namespace Ex03.GarageLogic.Vehicles
             motorcycleWheel.MaximumAirPressureLevel = k_MotorcycleWheelMaximumAirPressureLevel;
 
             return motorcycleWheel;
+        }
+
+        private static void throwExceptionForEngineVolumeOutOfRange()
+        {
+            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+
+            valueOutOfRangeException.MinValue = k_MinimumEngineVolumeInCubicCentimeters;
+            throw valueOutOfRangeException;
         }
     }
 }

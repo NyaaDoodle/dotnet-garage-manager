@@ -4,12 +4,14 @@ namespace Ex03.GarageLogic.Exceptions
 {
     public class ValueOutOfRangeException : Exception
     {
-        public float MinValue { get; set; } = k_MinValueDefaultValue;
-        public float MaxValue { get; set; } = k_MaxValueDefaultValue;
-        private const float k_MinValueDefaultValue = 0;
-        private const float k_MaxValueDefaultValue = 0;
+        public float? MinValue { get; set; }
+        public float? MaxValue { get; set; }
 
-        public ValueOutOfRangeException() {}
+        public ValueOutOfRangeException()
+        {
+            MinValue = null;
+            MaxValue = null;
+        }
 
         public ValueOutOfRangeException(float i_MinValue, float i_MaxValue)
         {

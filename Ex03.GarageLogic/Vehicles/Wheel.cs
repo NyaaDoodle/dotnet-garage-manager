@@ -1,13 +1,35 @@
-﻿using Ex03.GarageLogic.Exceptions;
+﻿using System.Runtime.InteropServices.ComTypes;
+using Ex03.GarageLogic.Exceptions;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     internal class Wheel
     {
+        private float m_MaximumAirPressureLevel;
+        private const float k_MinimumAirPressureLevel = 0;
+
         public string ManufacturerName { get; set; }
         public float CurrentAirPressureLevel { get; private set; }
-        public float MaximumAirPressureLevel { get; set; }
-        private const float k_MinimumAirPressureLevel = 0;
+
+        public float MaximumAirPressureLevel
+        {
+            get
+            {
+                return m_MaximumAirPressureLevel;
+            }
+            set
+            {
+                if (m_MaximumAirPressureLevel >= k_MinimumAirPressureLevel)
+                {
+                    m_MaximumAirPressureLevel = value;
+                }
+                else
+                {
+                    throwExceptionForAirPressureOutOfRange();
+                }
+            }
+        }
+
 
         public Wheel()
         {
@@ -22,19 +44,21 @@ namespace Ex03.GarageLogic.Vehicles
 
         public void Inflate(float i_AirPressureToAdd)
         {
+            bool isAirPressureToAddBelowMinimum = i_AirPressureToAdd < k_MinimumAirPressureLevel;
             float newAirPressureLevel = CurrentAirPressureLevel + i_AirPressureToAdd;
+            bool isNewAirPressureAboveMaximum = newAirPressureLevel > MaximumAirPressureLevel;
 
-            if (newAirPressureLevel <= MaximumAirPressureLevel)
-            { 
+            if (!isAirPressureToAddBelowMinimum && !isNewAirPressureAboveMaximum)
+            {
                 CurrentAirPressureLevel = newAirPressureLevel;
             }
             else
-            { 
-                throwExceptionForExceedingMaximumAirPressure();
+            {
+                throwExceptionForAirPressureOutOfRange();
             }
         }
 
-        private void throwExceptionForExceedingMaximumAirPressure()
+        private void throwExceptionForAirPressureOutOfRange()
         {
             ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
 

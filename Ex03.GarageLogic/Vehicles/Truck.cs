@@ -1,14 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using Ex03.GarageLogic.Exceptions;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     internal class Truck : Vehicle
     {
-        public bool IsDeliveringWithRefrigeration { get; set; }
-        public float TruckloadVolume { get; set; }
-        public GasolineFuelTank FuelTank { get; set; }
+        private float m_TruckloadVolume;
         private const float k_MinimumTruckloadVolume = 0;
-        
+
+        public bool IsDeliveringWithRefrigeration { get; set; }
+        public GasolineFuelTank FuelTank { get; set; }
+
+        public float TruckloadVolume
+        {
+            get
+            {
+                return m_TruckloadVolume;
+            }
+            set
+            {
+                if (value >= k_MinimumTruckloadVolume)
+                {
+                    m_TruckloadVolume = value;
+                }
+                else
+                {
+                    throwExceptionForTruckloadVolumeOutOfRange();
+                }
+            }
+        }
+
         public Truck()
         {
             const bool k_IsDeliveringWithRefrigerationDefaultValue = false;
@@ -53,6 +74,14 @@ namespace Ex03.GarageLogic.Vehicles
             truckFuelTank.MaximumFuelAmountInLiters = k_TruckMaximumFuelAmountInLiters;
 
             return truckFuelTank;
+        }
+
+        private static void throwExceptionForTruckloadVolumeOutOfRange()
+        {
+            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
+
+            valueOutOfRangeException.MinValue = k_MinimumTruckloadVolume;
+            throw valueOutOfRangeException;
         }
     }
 }
