@@ -1,5 +1,7 @@
 ﻿using Ex03.GarageLogic.Exceptions;
 using System.Collections.Generic;
+using Ex03.GarageLogic.Garage;
+using Ex03.GarageLogic.Utilities;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -45,20 +47,22 @@ namespace Ex03.GarageLogic.Vehicles
         {
             LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
+            LinkedListUtilities.AppendToLinkedList(base.GetDefiningPropertiesNames(), definingPropertiesNames);
             definingPropertiesNames.AddLast(nameof(IsDeliveringWithRefrigeration));
             definingPropertiesNames.AddLast(nameof(TruckloadVolume));
 
             return definingPropertiesNames;
         }
 
-        public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
+        public override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            bool isDeliveringWithRefrigerationValue = GetValueForDefiningProperty<bool>(
-                nameof(IsDeliveringWithRefrigeration),
-                i_DefiningPropertiesValuesToParse);
-            float truckLoadVolumeValue = GetValueForDefiningProperty<float>(
-                nameof(truckLoadVolumeValue),
-                i_DefiningPropertiesValuesToParse);
+            base.SetDefiningProperties(i_DefiningPropertiesDictionary);
+
+            bool isDeliveringWithRefrigerationValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<bool>(
+                    nameof(isDeliveringWithRefrigerationValue));
+            float truckLoadVolumeValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(nameof(TruckloadVolume));
 
             IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
             TruckloadVolume = truckLoadVolumeValue;
@@ -81,22 +85,16 @@ namespace Ex03.GarageLogic.Vehicles
         private static Wheel getNewTruckWheel()
         {
             const float k_TruckWheelMaximumAirPressureLevel = 29;
-            Wheel truckWheel = new Wheel();
 
-            truckWheel.MaximumAirPressureLevel = k_TruckWheelMaximumAirPressureLevel;
-
-            return truckWheel;
+            return new Wheel(k_TruckWheelMaximumAirPressureLevel);
         }
 
         private static GasolineFuelTank getInitialTruckFuelTank()
         {
             const eFuelType k_TruckFuelType = eFuelType.Soler;
             const float k_TruckMaximumFuelAmountInLiters = 125;
-            GasolineFuelTank truckFuelTank = new GasolineFuelTank(k_TruckFuelType);
 
-            truckFuelTank.MaximumFuelAmountInLiters = k_TruckMaximumFuelAmountInLiters;
-
-            return truckFuelTank;
+            return new GasolineFuelTank(k_TruckFuelType, k_TruckMaximumFuelAmountInLiters);
         }
 
         private static void throwExceptionForTruckloadVolumeOutOfRange()

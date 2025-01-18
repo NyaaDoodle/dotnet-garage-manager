@@ -7,10 +7,10 @@ namespace Ex03.GarageLogic.Vehicles
     internal class Wheel
     {
         private float m_CurrentAirPressureLevel;
-        private float m_MaximumAirPressureLevel;
         private const float k_MinimumAirPressureLevel = 0;
 
         public string ManufacturerName { get; set; }
+        public float MaximumAirPressureLevel { get; }
         public float CurrentAirPressureLevel
         {
             get
@@ -30,35 +30,15 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        public float MaximumAirPressureLevel
-        {
-            get
-            {
-                return m_MaximumAirPressureLevel;
-            }
-            set
-            {
-                if (value >= k_MinimumAirPressureLevel)
-                {
-                    m_MaximumAirPressureLevel = value;
-                }
-                else
-                {
-                    throwExceptionForAirPressureOutOfRange();
-                }
-            }
-        }
 
-
-        public Wheel()
+        public Wheel(float i_MaximumAirPressureLevel)
         {
             const string k_DefaultManufacturerName = null;
             const float k_DefaultCurrentAirPressureLevel = k_MinimumAirPressureLevel;
-            const float k_DefaultMaximumAirPressureLevel = k_MinimumAirPressureLevel;
 
             ManufacturerName = k_DefaultManufacturerName;
             CurrentAirPressureLevel = k_DefaultCurrentAirPressureLevel;
-            MaximumAirPressureLevel = k_DefaultMaximumAirPressureLevel;
+            MaximumAirPressureLevel = i_MaximumAirPressureLevel;
         }
 
         public void Inflate(float i_AirPressureToAdd)
@@ -91,15 +71,11 @@ namespace Ex03.GarageLogic.Vehicles
         {
             string manufacturerNameValue =
                 i_DefiningPropertiesDictionary.GetValueStringForDefiningProperty(nameof(ManufacturerName));
-            float maximumAirPressureLevelValue =
-                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
-                    nameof(MaximumAirPressureLevel));
             float currentAirPressureLevel =
                 i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
                     nameof(CurrentAirPressureLevel));
 
             ManufacturerName = manufacturerNameValue;
-            MaximumAirPressureLevel = maximumAirPressureLevelValue;
             CurrentAirPressureLevel = currentAirPressureLevel;
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Ex03.GarageLogic.Exceptions;
 using Ex03.GarageLogic.Garage;
-using static Ex03.GarageLogic.Vehicles.Car;
+using Ex03.GarageLogic.Utilities;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -17,7 +17,6 @@ namespace Ex03.GarageLogic.Vehicles
 
         private int m_EngineVolumeInCubicCentimeters;
         private const int k_MinimumEngineVolumeInCubicCentimeters = 0;
-        private const float k_MotorcycleWheelMaximumAirPressureLevel = 32;
 
         public eLicenseClass? LicenseClass { get; set; }
 
@@ -40,20 +39,28 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        protected override ICollection<string> GetDefiningPropertiesNames()
+        public Motorcycle()
+        {
+            const int k_DefaultEngineVolume = k_MinimumEngineVolumeInCubicCentimeters;
+
+            LicenseClass = null;
+            EngineVolumeInCubicCentimeters = k_DefaultEngineVolume;
+            Wheels = getInitialMotorcycleWheels();
+        }
+
+        public override ICollection<string> GetDefiningPropertiesNames()
         {
             LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
-            AddVehicleDefiningPropertiesNamesToList(definingPropertiesNames);
+            LinkedListUtilities.AppendToLinkedList(base.GetDefiningPropertiesNames(), definingPropertiesNames);
             definingPropertiesNames.AddLast(nameof(LicenseClass));
             definingPropertiesNames.AddLast(nameof(EngineVolumeInCubicCentimeters));
 
             return definingPropertiesNames;
         }
 
-        protected override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        public override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            AddMaximumAirPressureToDefiningPropertiesDictionary(k_MotorcycleWheelMaximumAirPressureLevel, i_DefiningPropertiesDictionary);
             base.SetDefiningProperties(i_DefiningPropertiesDictionary);
 
             eLicenseClass licenseClassValue =
@@ -63,15 +70,6 @@ namespace Ex03.GarageLogic.Vehicles
 
             LicenseClass = licenseClassValue;
             EngineVolumeInCubicCentimeters = engineVolumeInCubicCentimetersValue;
-        }
-
-        public Motorcycle()
-        {
-            const int k_DefaultEngineVolume = k_MinimumEngineVolumeInCubicCentimeters;
-
-            LicenseClass = null;
-            EngineVolumeInCubicCentimeters = k_DefaultEngineVolume;
-            Wheels = getInitialMotorcycleWheels();
         }
 
         private static LinkedList<Wheel> getInitialMotorcycleWheels()
@@ -89,11 +87,9 @@ namespace Ex03.GarageLogic.Vehicles
 
         private static Wheel getNewMotorcycleWheel()
         {
-            Wheel motorcycleWheel = new Wheel();
+            const float k_MotorcycleWheelMaximumAirPressureLevel = 32;
 
-            motorcycleWheel.MaximumAirPressureLevel = k_MotorcycleWheelMaximumAirPressureLevel;
-
-            return motorcycleWheel;
+            return new Wheel(k_MotorcycleWheelMaximumAirPressureLevel);
         }
 
         private static void throwExceptionForEngineVolumeOutOfRange()

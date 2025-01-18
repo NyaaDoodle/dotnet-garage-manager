@@ -25,9 +25,34 @@ namespace Ex03.GarageLogic.Garage
             vehicleInGarageInfo.RepairState = i_NewRepairState;
         }
 
-        public void AddNewInitialVehicleToGarage(string i_VehicleType)
+        public void AddNewInitialVehicleToGarage(string i_VehicleType, string i_RegistrationPlateId)
         {
-            
+            Vehicle newVehicle = VehicleMaker.MakeVehicle(i_VehicleType);
+            if (newVehicle != null)
+            {
+                newVehicle.RegistrationPlateId = i_RegistrationPlateId;
+                VehicleInGarageInfo newVehicleInGarageInfo = new VehicleInGarageInfo(newVehicle);
+                newVehicleInGarageInfo.RepairState = eRepairState.InRepairs;
+                r_VehiclesInGarageByRegistrationPlateId.Add(i_RegistrationPlateId, newVehicleInGarageInfo);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public ICollection<string> GetVehicleDefiningPropertiesNames(string i_RegistrationPlateId)
+        {
+            VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
+
+            return vehicleInGarageInfo.GetDefiningPropertiesNames();
+        }
+
+        public void SetDefiningPropertiesOfVehicle(string i_RegistrationPlateId, DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
+
+            vehicleInGarageInfo.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
 
         public ICollection<string> GetAllRegistrationPlateIdsOfVehiclesInGarageList()
@@ -53,7 +78,7 @@ namespace Ex03.GarageLogic.Garage
         public void InflateVehicleWheelsToMaximumAirPressureLevel(string i_RegistrationPlateId)
         {
             VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
-            LinkedList<Wheel> vehicleWheels = vehicleInGarageInfo.Vehicle.Wheels;
+            ICollection<Wheel> vehicleWheels = vehicleInGarageInfo.Vehicle.Wheels;
 
             foreach (Wheel wheel in vehicleWheels)
             {

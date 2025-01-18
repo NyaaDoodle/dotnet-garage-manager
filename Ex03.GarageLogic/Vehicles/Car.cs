@@ -1,6 +1,7 @@
 ﻿using Ex03.GarageLogic.Exceptions;
 using Ex03.GarageLogic.Garage;
 using System.Collections.Generic;
+using Ex03.GarageLogic.Utilities;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -17,7 +18,6 @@ namespace Ex03.GarageLogic.Vehicles
         private int m_DoorCount;
         private const int k_MinimumDoorCount = 2;
         private const int k_MaximumDoorCount = 5;
-        private const float k_CarWheelMaximumAirPressureLevel = 34;
 
         public eColor? Color { get; set; }
 
@@ -49,22 +49,19 @@ namespace Ex03.GarageLogic.Vehicles
             Wheels = getInitialCarWheels();
         }
 
-        protected override ICollection<string> GetDefiningPropertiesNames()
+        public override ICollection<string> GetDefiningPropertiesNames()
         {
             LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
-            AddVehicleDefiningPropertiesNamesToList(definingPropertiesNames);
+            LinkedListUtilities.AppendToLinkedList(base.GetDefiningPropertiesNames(), definingPropertiesNames);
             definingPropertiesNames.AddLast(nameof(Color));
             definingPropertiesNames.AddLast(nameof(DoorCount));
 
             return definingPropertiesNames;
         }
 
-        protected override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        public override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            AddMaximumAirPressureToDefiningPropertiesDictionary(
-                k_CarWheelMaximumAirPressureLevel,
-                i_DefiningPropertiesDictionary);
             base.SetDefiningProperties(i_DefiningPropertiesDictionary);
 
             eColor colorValue = i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<eColor>(nameof(Color));
@@ -90,11 +87,9 @@ namespace Ex03.GarageLogic.Vehicles
 
         private static Wheel getNewCarWheel()
         {
-            Wheel carWheel = new Wheel();
+            const float k_CarWheelMaximumAirPressureLevel = 34;
 
-            carWheel.MaximumAirPressureLevel = k_CarWheelMaximumAirPressureLevel;
-
-            return carWheel;
+            return new Wheel(k_CarWheelMaximumAirPressureLevel);
         }
 
         private static void throwExceptionForDoorCountOutOfRange()

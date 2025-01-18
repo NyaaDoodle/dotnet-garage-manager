@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Ex03.GarageLogic.Garage;
+using Ex03.GarageLogic.Utilities;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -15,34 +17,26 @@ namespace Ex03.GarageLogic.Vehicles
         {
             LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
-            definingPropertiesNames.AddLast(nameof(IsDeliveringWithRefrigeration));
-            definingPropertiesNames.AddLast(nameof(TruckloadVolume));
+            LinkedListUtilities.AppendToLinkedList(base.GetDefiningPropertiesNames(), definingPropertiesNames);
+            LinkedListUtilities.AppendToLinkedList(
+                GasolineFuelTank.GetDefiningPropertiesNames(),
+                definingPropertiesNames);
 
             return definingPropertiesNames;
         }
 
-        public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
+        public override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            bool isDeliveringWithRefrigerationValue = GetValueForDefiningProperty<bool>(
-                nameof(IsDeliveringWithRefrigeration),
-                i_DefiningPropertiesValuesToParse);
-            float truckLoadVolumeValue = GetValueForDefiningProperty<float>(
-                nameof(truckLoadVolumeValue),
-                i_DefiningPropertiesValuesToParse);
-
-            IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
-            TruckloadVolume = truckLoadVolumeValue;
+            base.SetDefiningProperties(i_DefiningPropertiesDictionary);
+            FuelTank.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
 
         private static GasolineFuelTank getInitialMotorcycleFuelTank()
         {
             const float k_MotorcycleMaximumFuelAmountInLiters = 6.2f;
             const eFuelType k_MotorcycleFuelType = eFuelType.Octan98;
-            GasolineFuelTank motorcycleFuelTank = new GasolineFuelTank(k_MotorcycleFuelType);
 
-            motorcycleFuelTank.MaximumFuelAmountInLiters = k_MotorcycleMaximumFuelAmountInLiters;
-
-            return motorcycleFuelTank;
+            return new GasolineFuelTank(k_MotorcycleFuelType, k_MotorcycleMaximumFuelAmountInLiters);
         }
     }
 }

@@ -6,36 +6,36 @@ namespace Ex03.GarageLogic.Vehicles
 {
     internal class ElectricVehicleBattery
     {
-        private float m_MaximumChargeTimeInHours;
+        private float m_ChargeTimeLeftInHours;
         private const float k_MinimumChargeTimeInHours = 0;
 
-        public float ChargeTimeLeftInHours { get; private set; }
-        public float MaximumChargeTimeInHours
+        public float MaximumChargeTimeInHours { get; }
+
+        public float ChargeTimeLeftInHours
         {
             get
             {
-                return m_MaximumChargeTimeInHours;
+                return m_ChargeTimeLeftInHours;
             }
             set
             {
-                if (value >= k_MinimumChargeTimeInHours)
+                if (value >= k_MinimumChargeTimeInHours && value <= MaximumChargeTimeInHours)
                 {
-                    m_MaximumChargeTimeInHours = value;
+                    m_ChargeTimeLeftInHours = value;
                 }
                 else
                 {
-                    throwExceptionForMaximumChargeTimeOutOfRange();
+                    throwExceptionForChargeTimeOutOfRange();
                 }
             }
         }
 
-        public ElectricVehicleBattery()
+        public ElectricVehicleBattery(float i_MaximumChargeTimeInHours)
         {
             const float k_DefaultChargeTimeLeftInHours = k_MinimumChargeTimeInHours;
-            const float k_DefaultMaximumChargeTimeInHours = k_MinimumChargeTimeInHours;
 
             ChargeTimeLeftInHours = k_DefaultChargeTimeLeftInHours;
-            MaximumChargeTimeInHours = k_DefaultMaximumChargeTimeInHours;
+            MaximumChargeTimeInHours = i_MaximumChargeTimeInHours;
         }
 
         public void Charge(float i_ChargeTimeToAddInHours)
@@ -65,15 +65,10 @@ namespace Ex03.GarageLogic.Vehicles
 
         public void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            
-        }
+            float chargeTimeValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(nameof(ChargeTimeLeftInHours));
 
-        private static void throwExceptionForMaximumChargeTimeOutOfRange()
-        {
-            ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();
-
-            valueOutOfRangeException.MinValue = k_MinimumChargeTimeInHours;
-            throw valueOutOfRangeException;
+            ChargeTimeLeftInHours = chargeTimeValue;
         }
 
         private void throwExceptionForChargeTimeOutOfRange()

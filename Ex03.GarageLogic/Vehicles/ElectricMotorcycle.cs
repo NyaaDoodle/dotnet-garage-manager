@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Ex03.GarageLogic.Garage;
+using Ex03.GarageLogic.Utilities;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -15,33 +17,25 @@ namespace Ex03.GarageLogic.Vehicles
         {
             LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
-            definingPropertiesNames.AddLast(nameof(IsDeliveringWithRefrigeration));
-            definingPropertiesNames.AddLast(nameof(TruckloadVolume));
+            LinkedListUtilities.AppendToLinkedList(base.GetDefiningPropertiesNames(), definingPropertiesNames);
+            LinkedListUtilities.AppendToLinkedList(
+                ElectricVehicleBattery.GetDefiningPropertiesNames(),
+                definingPropertiesNames);
 
             return definingPropertiesNames;
         }
 
-        public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
+        public override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
         {
-            bool isDeliveringWithRefrigerationValue = GetValueForDefiningProperty<bool>(
-                nameof(IsDeliveringWithRefrigeration),
-                i_DefiningPropertiesValuesToParse);
-            float truckLoadVolumeValue = GetValueForDefiningProperty<float>(
-                nameof(truckLoadVolumeValue),
-                i_DefiningPropertiesValuesToParse);
-
-            IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
-            TruckloadVolume = truckLoadVolumeValue;
+            base.SetDefiningProperties(i_DefiningPropertiesDictionary);
+            Battery.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
 
         private static ElectricVehicleBattery getInitialMotorcycleBattery()
         {
             const float k_MotorcycleMaximumChargeTimeInHours = 2.9f;
-            ElectricVehicleBattery motorcycleBattery = new ElectricVehicleBattery();
 
-            motorcycleBattery.MaximumChargeTimeInHours = k_MotorcycleMaximumChargeTimeInHours;
-
-            return motorcycleBattery;
+            return new ElectricVehicleBattery(k_MotorcycleMaximumChargeTimeInHours);
         }
     }
 }
