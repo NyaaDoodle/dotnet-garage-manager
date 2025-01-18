@@ -1,15 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ex03.GarageLogic.Exceptions;
+using Ex03.GarageLogic.Garage;
+using static Ex03.GarageLogic.Vehicles.Car;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     internal class GasolineFuelTank
     {
+        private float m_CurrentFuelAmountInLiters;
         private float m_MaximumFuelAmountInLiters;
         private const float k_MinimumFuelAmountInLiters = 0;
 
         public eFuelType FuelTypeInTank { get; }
-        public float CurrentFuelAmountInLiters { get; private set; }
+
+        public float CurrentFuelAmountInLiters
+        {
+            get
+            {
+                return m_CurrentFuelAmountInLiters;
+            }
+            set
+            {
+                if (value >= k_MinimumFuelAmountInLiters && value <= MaximumFuelAmountInLiters)
+                {
+                    m_CurrentFuelAmountInLiters = value;
+                }
+                else
+                {
+                    throwExceptionForFuelAmountOutOfRange();
+                }
+            }
+        }
         public float MaximumFuelAmountInLiters
         {
             get
@@ -29,12 +51,12 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        public GasolineFuelTank(eFuelType i_FuelTankInTank)
-        {
+        public GasolineFuelTank(eFuelType i_FuelTypeInTank)
+        { 
             const float k_DefaultCurrentFuelAmount = k_MinimumFuelAmountInLiters;
             const float k_DefaultMaximumFuelAmount = k_MinimumFuelAmountInLiters;
 
-            FuelTypeInTank = i_FuelTankInTank;
+            FuelTypeInTank = i_FuelTypeInTank;
             CurrentFuelAmountInLiters = k_DefaultCurrentFuelAmount;
             MaximumFuelAmountInLiters = k_DefaultMaximumFuelAmount;
         }
@@ -61,6 +83,28 @@ namespace Ex03.GarageLogic.Vehicles
             {
                 throwExceptionForIncorrectFuelType(i_FuelType);
             }
+        }
+
+        public static ICollection<string> GetDefiningPropertiesNames()
+        {
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            definingPropertiesNames.AddLast(nameof(CurrentFuelAmountInLiters));
+
+            return definingPropertiesNames;
+        }
+
+        public void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            float currentFuelAmountValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
+                    nameof(CurrentFuelAmountInLiters));
+            float maximumFuelAmountValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
+                    nameof(MaximumFuelAmountInLiters));
+
+            CurrentFuelAmountInLiters = currentFuelAmountValue;
+            MaximumFuelAmountInLiters = maximumFuelAmountValue;
         }
 
         private static void throwExceptionForMaximumFuelAmountOutOfRange()

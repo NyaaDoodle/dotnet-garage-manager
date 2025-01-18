@@ -1,4 +1,6 @@
 ﻿using Ex03.GarageLogic.Exceptions;
+using Ex03.GarageLogic.Garage;
+using System.Collections.Generic;
 
 namespace Ex03.GarageLogic.Vehicles
 {
@@ -50,6 +52,20 @@ namespace Ex03.GarageLogic.Vehicles
             {
                 throwExceptionForChargeTimeOutOfRange();
             }
+        }
+
+        public static ICollection<string> GetDefiningPropertiesNames()
+        {
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            definingPropertiesNames.AddLast(nameof(ChargeTimeLeftInHours));
+
+            return definingPropertiesNames;
+        }
+
+        public void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            
         }
 
         private static void throwExceptionForMaximumChargeTimeOutOfRange()

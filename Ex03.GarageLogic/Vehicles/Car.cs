@@ -1,9 +1,10 @@
 ﻿using Ex03.GarageLogic.Exceptions;
+using Ex03.GarageLogic.Garage;
 using System.Collections.Generic;
 
 namespace Ex03.GarageLogic.Vehicles
 {
-    internal abstract class Car : Vehicle
+    internal class Car : Vehicle
     {
         internal enum eColor : byte
         {
@@ -16,6 +17,7 @@ namespace Ex03.GarageLogic.Vehicles
         private int m_DoorCount;
         private const int k_MinimumDoorCount = 2;
         private const int k_MaximumDoorCount = 5;
+        private const float k_CarWheelMaximumAirPressureLevel = 34;
 
         public eColor? Color { get; set; }
 
@@ -38,13 +40,39 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        protected Car()
+        public Car()
         {
             const int k_DefaultDoorCount = k_MinimumDoorCount;
 
             Color = null;
             DoorCount = k_DefaultDoorCount;
             Wheels = getInitialCarWheels();
+        }
+
+        protected override ICollection<string> GetDefiningPropertiesNames()
+        {
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            AddVehicleDefiningPropertiesNamesToList(definingPropertiesNames);
+            definingPropertiesNames.AddLast(nameof(Color));
+            definingPropertiesNames.AddLast(nameof(DoorCount));
+
+            return definingPropertiesNames;
+        }
+
+        protected override void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            AddMaximumAirPressureToDefiningPropertiesDictionary(
+                k_CarWheelMaximumAirPressureLevel,
+                i_DefiningPropertiesDictionary);
+            base.SetDefiningProperties(i_DefiningPropertiesDictionary);
+
+            eColor colorValue = i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<eColor>(nameof(Color));
+            int doorCountValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<int>(nameof(DoorCount));
+
+            Color = colorValue;
+            DoorCount = doorCountValue;
         }
 
         private static LinkedList<Wheel> getInitialCarWheels()
@@ -62,7 +90,6 @@ namespace Ex03.GarageLogic.Vehicles
 
         private static Wheel getNewCarWheel()
         {
-            const float k_CarWheelMaximumAirPressureLevel = 34;
             Wheel carWheel = new Wheel();
 
             carWheel.MaximumAirPressureLevel = k_CarWheelMaximumAirPressureLevel;

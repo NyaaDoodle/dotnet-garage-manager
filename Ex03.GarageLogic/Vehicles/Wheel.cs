@@ -1,15 +1,34 @@
-﻿using System.Runtime.InteropServices.ComTypes;
+﻿using System.Collections.Generic;
 using Ex03.GarageLogic.Exceptions;
+using Ex03.GarageLogic.Garage;
 
 namespace Ex03.GarageLogic.Vehicles
 {
     internal class Wheel
     {
+        private float m_CurrentAirPressureLevel;
         private float m_MaximumAirPressureLevel;
         private const float k_MinimumAirPressureLevel = 0;
 
         public string ManufacturerName { get; set; }
-        public float CurrentAirPressureLevel { get; private set; }
+        public float CurrentAirPressureLevel
+        {
+            get
+            {
+                return m_CurrentAirPressureLevel;
+            }
+            set
+            {
+                if (value >= k_MinimumAirPressureLevel && value <= MaximumAirPressureLevel)
+                {
+                    m_CurrentAirPressureLevel = value;
+                }
+                else
+                {
+                    throwExceptionForAirPressureOutOfRange();
+                }
+            }
+        }
 
         public float MaximumAirPressureLevel
         {
@@ -19,7 +38,7 @@ namespace Ex03.GarageLogic.Vehicles
             }
             set
             {
-                if (m_MaximumAirPressureLevel >= k_MinimumAirPressureLevel)
+                if (value >= k_MinimumAirPressureLevel)
                 {
                     m_MaximumAirPressureLevel = value;
                 }
@@ -56,6 +75,32 @@ namespace Ex03.GarageLogic.Vehicles
             {
                 throwExceptionForAirPressureOutOfRange();
             }
+        }
+
+        public static ICollection<string> GetDefiningPropertiesNames()
+        {
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            definingPropertiesNames.AddLast(nameof(ManufacturerName));
+            definingPropertiesNames.AddLast(nameof(CurrentAirPressureLevel));
+
+            return definingPropertiesNames;
+        }
+
+        public void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            string manufacturerNameValue =
+                i_DefiningPropertiesDictionary.GetValueStringForDefiningProperty(nameof(ManufacturerName));
+            float maximumAirPressureLevelValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
+                    nameof(MaximumAirPressureLevel));
+            float currentAirPressureLevel =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
+                    nameof(CurrentAirPressureLevel));
+
+            ManufacturerName = manufacturerNameValue;
+            MaximumAirPressureLevel = maximumAirPressureLevelValue;
+            CurrentAirPressureLevel = currentAirPressureLevel;
         }
 
         private void throwExceptionForAirPressureOutOfRange()

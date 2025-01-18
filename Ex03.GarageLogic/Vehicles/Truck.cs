@@ -53,18 +53,15 @@ namespace Ex03.GarageLogic.Vehicles
 
         public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
         {
-            if (IsAllDefiningPropertiesExistInDefiningPropertiesDictionary(i_DefiningPropertiesValuesToParse))
-            {
-                i_DefiningPropertiesValuesToParse.TryGetValue(
-                    nameof(IsDeliveringWithRefrigeration),
-                    out string isDeliveringWithRefrigerationValue);
+            bool isDeliveringWithRefrigerationValue = GetValueForDefiningProperty<bool>(
+                nameof(IsDeliveringWithRefrigeration),
+                i_DefiningPropertiesValuesToParse);
+            float truckLoadVolumeValue = GetValueForDefiningProperty<float>(
+                nameof(truckLoadVolumeValue),
+                i_DefiningPropertiesValuesToParse);
 
-            }
-            else
-            {
-
-            }
-            throw new System.NotImplementedException();
+            IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
+            TruckloadVolume = truckLoadVolumeValue;
         }
 
         private static LinkedList<Wheel> getInitialTruckWheels()

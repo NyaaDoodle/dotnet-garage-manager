@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
+    <Compile Include="Garage\DefiningPropertiesDictionary.cs" />
     <Compile Include="Garage\eRepairState.cs" />
     <Compile Include="Garage\GarageManagementLogic.cs" />
     <Compile Include="Garage\VehicleInGarageInfo.cs" />

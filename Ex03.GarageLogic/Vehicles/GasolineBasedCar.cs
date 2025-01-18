@@ -13,12 +13,25 @@ namespace Ex03.GarageLogic.Vehicles
 
         public override ICollection<string> GetDefiningPropertiesNames()
         {
-            throw new System.NotImplementedException();
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            definingPropertiesNames.AddLast(nameof(IsDeliveringWithRefrigeration));
+            definingPropertiesNames.AddLast(nameof(TruckloadVolume));
+
+            return definingPropertiesNames;
         }
 
         public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
         {
-            throw new System.NotImplementedException();
+            bool isDeliveringWithRefrigerationValue = GetValueForDefiningProperty<bool>(
+                nameof(IsDeliveringWithRefrigeration),
+                i_DefiningPropertiesValuesToParse);
+            float truckLoadVolumeValue = GetValueForDefiningProperty<float>(
+                nameof(truckLoadVolumeValue),
+                i_DefiningPropertiesValuesToParse);
+
+            IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
+            TruckloadVolume = truckLoadVolumeValue;
         }
 
         private static GasolineFuelTank getInitialCarFuelTank()

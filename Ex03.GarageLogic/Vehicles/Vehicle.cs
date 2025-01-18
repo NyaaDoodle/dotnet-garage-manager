@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using Ex03.GarageLogic.Exceptions;
+using Ex03.GarageLogic.Garage;
 
 namespace Ex03.GarageLogic.Vehicles
 {
-    internal abstract class Vehicle
+    internal class Vehicle
     {
         private float m_EnergyRemainingPercentage;
         private const float k_MinimumEnergyRemainingPercentage = 0;
         private const float k_MaximumEnergyRemainingPercentage = 100;
+
         public string ModelName { get; set; }
         public string RegistrationPlateId { get; set; }
-        public LinkedList<Wheel> Wheels { get; set; }
+        public ICollection<Wheel> Wheels { get; set; }
         public float EnergyRemainingPercentage {
             get
             {
@@ -29,14 +31,11 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        public abstract ICollection<string> GetDefiningPropertiesNames();
-        public abstract void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse);
-
-        protected Vehicle()
+        public Vehicle()
         {
             const string k_DefaultModelName = null;
             const string k_DefaultRegistrationPlateId = null;
-            
+
             const float k_DefaultEnergyRemainingPercentage = k_MinimumEnergyRemainingPercentage;
 
             ModelName = k_DefaultModelName;
@@ -45,21 +44,61 @@ namespace Ex03.GarageLogic.Vehicles
             Wheels = new LinkedList<Wheel>();
         }
 
-        protected bool IsAllDefiningPropertiesExistInDefiningPropertiesDictionary(
-            Dictionary<string, string> i_DefiningPropertiesDictionary)
+        protected virtual ICollection<string> GetDefiningPropertiesNames()
         {
-            bool isAllDefiningPropertiesExistInDictionary = true;
-            ICollection<string> definingPropertiesNames = GetDefiningPropertiesNames();
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
 
-            foreach (string definingPropertyName in definingPropertiesNames)
+            definingPropertiesNames.AddLast(nameof(ModelName));
+            definingPropertiesNames.AddLast(nameof(RegistrationPlateId));
+            definingPropertiesNames.AddLast(nameof(EnergyRemainingPercentage));
+            addWheelDefiningPropertiesNames(definingPropertiesNames);
+
+            return definingPropertiesNames;
+        }
+
+        protected virtual void SetDefiningProperties(DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            string modelNameValue = i_DefiningPropertiesDictionary.GetValueStringForDefiningProperty(nameof(ModelName));
+            string registrationPlateIdValue =
+                i_DefiningPropertiesDictionary.GetValueStringForDefiningProperty(nameof(RegistrationPlateId));
+            float energyRemainingPercentageValue =
+                i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(
+                    nameof(EnergyRemainingPercentage));
+
+            ModelName = modelNameValue;
+            RegistrationPlateId = registrationPlateIdValue;
+            EnergyRemainingPercentage = energyRemainingPercentageValue;
+            foreach (Wheel wheel in Wheels)
             {
-                if (!i_DefiningPropertiesDictionary.ContainsKey(definingPropertyName))
-                {
-                    isAllDefiningPropertiesExistInDictionary = false;
-                }
+                wheel.SetDefiningProperties(i_DefiningPropertiesDictionary);
             }
+        }
 
-            return isAllDefiningPropertiesExistInDictionary;
+        protected static void AddMaximumAirPressureToDefiningPropertiesDictionary(float i_MaximumAirPressure, DefiningPropertiesDictionary i_DefiningPropertiesDictionary)
+        {
+            i_DefiningPropertiesDictionary.AddValueStringForDefiningProperty(
+                nameof(Wheel.MaximumAirPressureLevel),
+                i_MaximumAirPressure.ToString());
+        }
+
+        protected void AddVehicleDefiningPropertiesNamesToList(LinkedList<string> i_ListToAddTo)
+        {
+            ICollection<string> propertiesNames = GetDefiningPropertiesNames();
+
+            foreach (string propertyName in propertiesNames)
+            {
+                i_ListToAddTo.AddLast(propertyName);
+            }
+        }
+
+        private static void addWheelDefiningPropertiesNames(LinkedList<string> i_ListToAddTo)
+        {
+            ICollection<string> wheelPropertiesNames = Wheel.GetDefiningPropertiesNames();
+
+            foreach (string wheelPropertyName in wheelPropertiesNames)
+            {
+                i_ListToAddTo.AddLast(wheelPropertyName);
+            }
         }
 
         private static void throwExceptionForEnergyPercentageOutOfRange()
