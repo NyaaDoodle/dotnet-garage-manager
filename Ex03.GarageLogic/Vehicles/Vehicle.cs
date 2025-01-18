@@ -29,8 +29,8 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        public abstract ICollection<string> GetDefiningProperties();
-        public abstract void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesDictionary);
+        public abstract ICollection<string> GetDefiningPropertiesNames();
+        public abstract void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse);
 
         protected Vehicle()
         {
@@ -43,6 +43,23 @@ namespace Ex03.GarageLogic.Vehicles
             RegistrationPlateId = k_DefaultRegistrationPlateId;
             EnergyRemainingPercentage = k_DefaultEnergyRemainingPercentage;
             Wheels = new LinkedList<Wheel>();
+        }
+
+        protected bool IsAllDefiningPropertiesExistInDefiningPropertiesDictionary(
+            Dictionary<string, string> i_DefiningPropertiesDictionary)
+        {
+            bool isAllDefiningPropertiesExistInDictionary = true;
+            ICollection<string> definingPropertiesNames = GetDefiningPropertiesNames();
+
+            foreach (string definingPropertyName in definingPropertiesNames)
+            {
+                if (!i_DefiningPropertiesDictionary.ContainsKey(definingPropertyName))
+                {
+                    isAllDefiningPropertiesExistInDictionary = false;
+                }
+            }
+
+            return isAllDefiningPropertiesExistInDictionary;
         }
 
         private static void throwExceptionForEnergyPercentageOutOfRange()

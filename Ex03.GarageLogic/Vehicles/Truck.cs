@@ -41,6 +41,32 @@ namespace Ex03.GarageLogic.Vehicles
             FuelTank = getInitialTruckFuelTank();
         }
 
+        public override ICollection<string> GetDefiningPropertiesNames()
+        {
+            LinkedList<string> definingPropertiesNames = new LinkedList<string>();
+
+            definingPropertiesNames.AddLast(nameof(IsDeliveringWithRefrigeration));
+            definingPropertiesNames.AddLast(nameof(TruckloadVolume));
+
+            return definingPropertiesNames;
+        }
+
+        public override void SetDefiningProperties(Dictionary<string, string> i_DefiningPropertiesValuesToParse)
+        {
+            if (IsAllDefiningPropertiesExistInDefiningPropertiesDictionary(i_DefiningPropertiesValuesToParse))
+            {
+                i_DefiningPropertiesValuesToParse.TryGetValue(
+                    nameof(IsDeliveringWithRefrigeration),
+                    out string isDeliveringWithRefrigerationValue);
+
+            }
+            else
+            {
+
+            }
+            throw new System.NotImplementedException();
+        }
+
         private static LinkedList<Wheel> getInitialTruckWheels()
         {
             const int k_TruckWheelCount = 12;

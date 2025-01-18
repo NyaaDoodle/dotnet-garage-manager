@@ -3,7 +3,7 @@ using Ex03.GarageLogic.Exceptions;
 
 namespace Ex03.GarageLogic.Vehicles
 {
-    internal class Motorcycle : Vehicle
+    internal abstract class Motorcycle : Vehicle
     {
         internal enum eLicenseClass : byte
         {
@@ -37,7 +37,7 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-        public Motorcycle()
+        protected Motorcycle()
         {
             const int k_DefaultEngineVolume = k_MinimumEngineVolumeInCubicCentimeters;
 

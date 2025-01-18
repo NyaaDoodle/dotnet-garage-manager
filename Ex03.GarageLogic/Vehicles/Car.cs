@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex03.GarageLogic.Vehicles
 {
-    internal class Car : Vehicle
+    internal abstract class Car : Vehicle
     {
         internal enum eColor : byte
         {
@@ -38,8 +38,7 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
-
-        public Car()
+        protected Car()
         {
             const int k_DefaultDoorCount = k_MinimumDoorCount;
 
