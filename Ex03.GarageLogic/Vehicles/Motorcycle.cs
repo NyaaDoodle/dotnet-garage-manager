@@ -72,6 +72,17 @@ namespace Ex03.GarageLogic.Vehicles
             EngineVolumeInCubicCentimeters = engineVolumeInCubicCentimetersValue;
         }
 
+        public override Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            DictionaryUtilities.AppendToDictionary(base.GetDetails(), detailsDictionary);
+            detailsDictionary.Add(nameof(LicenseClass), (LicenseClass != null) ? LicenseClass.ToString() : "Undefined");
+            detailsDictionary.Add(nameof(EngineVolumeInCubicCentimeters), EngineVolumeInCubicCentimeters.ToString());
+
+            return detailsDictionary;
+        }
+
         private static LinkedList<Wheel> getInitialMotorcycleWheels()
         {
             const int k_MotorcycleWheelCount = 2;

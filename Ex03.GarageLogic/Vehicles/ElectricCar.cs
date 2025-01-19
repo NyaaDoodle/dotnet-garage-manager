@@ -56,6 +56,17 @@ namespace Ex03.GarageLogic.Vehicles
             Battery.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
 
+        public override Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            DictionaryUtilities.AppendToDictionary(base.GetDetails(), detailsDictionary);
+            detailsDictionary.Add(nameof(ChargeTimeLeftInHours), ChargeTimeLeftInHours.ToString());
+            detailsDictionary.Add(nameof(MaximumChargeTimeInHours), MaximumChargeTimeInHours.ToString());
+
+            return detailsDictionary;
+        }
+
         private static ElectricVehicleBattery getInitialCarBattery()
         {
             const float k_CarMaximumChargeTimeInHours = 5.4f;

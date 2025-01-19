@@ -13,6 +13,14 @@ namespace Ex03.GarageLogic.Vehicles
         public bool IsDeliveringWithRefrigeration { get; set; }
         public GasolineFuelTank FuelTank { get; set; }
 
+        public eFuelType FuelTypeInTank
+        {
+            get
+            {
+                return FuelTank.FuelTypeInTank;
+            }
+        }
+
         public float TruckloadVolume
         {
             get
@@ -32,6 +40,26 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
+        public float CurrentFuelAmountInLiters
+        {
+            get
+            {
+                return FuelTank.CurrentFuelAmountInLiters;
+            }
+            set
+            {
+                FuelTank.CurrentFuelAmountInLiters = value;
+            }
+        }
+
+        public float MaximumFuelAmountInLiters
+        {
+            get
+            {
+                return FuelTank.MaximumFuelAmountInLiters;
+            }
+        }
+
         public Truck()
         {
             const bool k_IsDeliveringWithRefrigerationDefaultValue = false;
@@ -41,6 +69,11 @@ namespace Ex03.GarageLogic.Vehicles
             TruckloadVolume = k_DefaultTruckloadVolume;
             Wheels = getInitialTruckWheels();
             FuelTank = getInitialTruckFuelTank();
+        }
+
+        public void FuelUp(float i_FuelAmountToAddInLiters, eFuelType i_FuelType)
+        {
+            FuelTank.FuelUp(i_FuelAmountToAddInLiters, i_FuelType);
         }
 
         public override ICollection<string> GetDefiningPropertiesNames()
@@ -60,12 +93,26 @@ namespace Ex03.GarageLogic.Vehicles
 
             bool isDeliveringWithRefrigerationValue =
                 i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<bool>(
-                    nameof(isDeliveringWithRefrigerationValue));
+                    nameof(IsDeliveringWithRefrigeration));
             float truckLoadVolumeValue =
                 i_DefiningPropertiesDictionary.GetParsedValueForDefiningProperty<float>(nameof(TruckloadVolume));
 
             IsDeliveringWithRefrigeration = isDeliveringWithRefrigerationValue;
             TruckloadVolume = truckLoadVolumeValue;
+        }
+
+        public override Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            DictionaryUtilities.AppendToDictionary(base.GetDetails(), detailsDictionary);
+            detailsDictionary.Add(nameof(IsDeliveringWithRefrigeration), IsDeliveringWithRefrigeration.ToString());
+            detailsDictionary.Add(nameof(TruckloadVolume), TruckloadVolume.ToString());
+            detailsDictionary.Add(nameof(FuelTypeInTank), FuelTypeInTank.ToString());
+            detailsDictionary.Add(nameof(CurrentFuelAmountInLiters), CurrentFuelAmountInLiters.ToString());
+            detailsDictionary.Add(nameof(MaximumFuelAmountInLiters), MaximumFuelAmountInLiters.ToString());
+
+            return detailsDictionary;
         }
 
         private static LinkedList<Wheel> getInitialTruckWheels()
@@ -76,7 +123,6 @@ namespace Ex03.GarageLogic.Vehicles
             for (int i = 0; i < k_TruckWheelCount; i++)
             {
                 truckWheels.AddLast(getNewTruckWheel());
-
             }
 
             return truckWheels;

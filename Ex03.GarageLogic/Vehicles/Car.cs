@@ -72,6 +72,17 @@ namespace Ex03.GarageLogic.Vehicles
             DoorCount = doorCountValue;
         }
 
+        public override Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            DictionaryUtilities.AppendToDictionary(base.GetDetails(), detailsDictionary);
+            detailsDictionary.Add(nameof(Color), (Color != null) ? Color.ToString() : "None");
+            detailsDictionary.Add(nameof(DoorCount), DoorCount.ToString());
+
+            return detailsDictionary;
+        }
+
         private static LinkedList<Wheel> getInitialCarWheels()
         {
             const int k_CarWheelCount = 5;

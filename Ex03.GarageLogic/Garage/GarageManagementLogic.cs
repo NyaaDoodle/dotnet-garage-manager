@@ -38,7 +38,19 @@ namespace Ex03.GarageLogic.Garage
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("This vehicle type cannot be created");
+            }
+        }
+
+        public void RemoveVehicleFromGarage(string i_RegistrationPlateId)
+        {
+            if (IsVehicleExistsInGarage(i_RegistrationPlateId))
+            {
+                r_VehiclesInGarageByRegistrationPlateId.Remove(i_RegistrationPlateId);
+            }
+            else
+            {
+                throw new ArgumentException("Vehicle does not exist in the garage");
             }
         }
 
@@ -85,7 +97,7 @@ namespace Ex03.GarageLogic.Garage
             {
                 if (wheel != null)
                 {
-                    float maximumAirPressureOfWheel = wheel.MaximumAirPressureLevel;
+                    float maximumAirPressureOfWheel = wheel.MaximumAirPressureLevel - wheel.CurrentAirPressureLevel;
 
                     wheel.Inflate(maximumAirPressureOfWheel);
                 }
@@ -111,12 +123,12 @@ namespace Ex03.GarageLogic.Garage
                 }
                 else
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException("Vehicle selected is not fueled by gasoline");
                 }
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle selected is not fueled by gasoline");
             }
         }
 
@@ -132,17 +144,17 @@ namespace Ex03.GarageLogic.Garage
                 MethodInfo chargeMethod = vehicleInGarage.GetType().GetMethod(k_ChargeMethodName);
                 if (chargeMethod != null)
                 {
-                    object[] chargeParameters = { i_ChargeTimeToAddInMinutes };
+                    object[] chargeParameters = { chargeTimeToAddInHours };
                     chargeMethod.Invoke(vehicleInGarage, chargeParameters);
                 }
                 else
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException("Vehicle selected is not fueled by electricity");
                 }
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Vehicle selected is not fueled by electricity");
             }
         }
 
@@ -150,18 +162,19 @@ namespace Ex03.GarageLogic.Garage
         {
             VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
 
+            return vehicleInGarageInfo.GetVehicleDetails();
         }
 
         private static bool isVehicleGasolineBased(Vehicle i_Vehicle)
         {
-            const string k_GasolineFuelTankName = nameof(GasolineFuelTank);
+            const string k_GasolineFuelTankName = "FuelTank";
 
             return i_Vehicle.GetType().GetProperty(k_GasolineFuelTankName) != null;
         }
 
         private static bool isVehicleElectricBased(Vehicle i_Vehicle)
         {
-            const string k_ElectricVehicleBatteryName = nameof(ElectricVehicleBattery);
+            const string k_ElectricVehicleBatteryName = "Battery";
 
             return i_Vehicle.GetType().GetProperty(k_ElectricVehicleBatteryName) != null;
         }

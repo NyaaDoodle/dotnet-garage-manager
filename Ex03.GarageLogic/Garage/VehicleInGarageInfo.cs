@@ -53,7 +53,10 @@ namespace Ex03.GarageLogic.Garage
             detailsDictionary.Add(nameof(OwnerName), OwnerName);
             detailsDictionary.Add(nameof(OwnerPhoneNumber), OwnerPhoneNumber);
             detailsDictionary.Add(nameof(RepairState), RepairState.ToString());
+            
+            DictionaryUtilities.AppendToDictionary(Vehicle.GetDetails(), detailsDictionary);
 
+            return detailsDictionary;
         }
     }
 }

@@ -71,6 +71,24 @@ namespace Ex03.GarageLogic.Vehicles
             }
         }
 
+        public virtual Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            detailsDictionary.Add(nameof(ModelName), ModelName);
+            detailsDictionary.Add(nameof(RegistrationPlateId), RegistrationPlateId);
+            detailsDictionary.Add(nameof(EnergyRemainingPercentage), EnergyRemainingPercentage.ToString());
+
+            int wheelNumber = 1;
+            foreach (Wheel wheel in Wheels)
+            {
+                DictionaryUtilities.AppendToDictionary(wheel.GetDetails(wheelNumber), detailsDictionary);
+                wheelNumber++;
+            }
+
+            return detailsDictionary;
+        }
+
         private static void throwExceptionForEnergyPercentageOutOfRange()
         {
             ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();

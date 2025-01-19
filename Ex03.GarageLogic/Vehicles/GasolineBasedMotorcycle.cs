@@ -63,6 +63,18 @@ namespace Ex03.GarageLogic.Vehicles
             FuelTank.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
 
+        public override Dictionary<string, string> GetDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            DictionaryUtilities.AppendToDictionary(base.GetDetails(), detailsDictionary);
+            detailsDictionary.Add(nameof(FuelTypeInTank), FuelTypeInTank.ToString());
+            detailsDictionary.Add(nameof(CurrentFuelAmountInLiters), CurrentFuelAmountInLiters.ToString());
+            detailsDictionary.Add(nameof(MaximumFuelAmountInLiters), MaximumFuelAmountInLiters.ToString());
+
+            return detailsDictionary;
+        }
+
         private static GasolineFuelTank getInitialMotorcycleFuelTank()
         {
             const float k_MotorcycleMaximumFuelAmountInLiters = 6.2f;

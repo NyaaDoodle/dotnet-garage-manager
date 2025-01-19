@@ -4,11 +4,13 @@ namespace Ex03.GarageLogic.Utilities
 {
     public class DictionaryUtilities
     {
-        public static void AppendToDictionary<T>(Dictionary<T> i_DictionaryToAppend, Dictionary<T> i_DictionaryToAppendTo)
+        public static void AppendToDictionary<K, V>(
+            Dictionary<K, V> i_DictionaryToAppend,
+            Dictionary<K, V> i_DictionaryToAppendTo)
         {
-            foreach (var itemToAppend in i_CollectionToAppend)
+            foreach (KeyValuePair<K, V> pairToAppend in i_DictionaryToAppend)
             {
-                i_ListToAppendTo.AddLast(itemToAppend);
+                i_DictionaryToAppendTo.Add(pairToAppend.Key, pairToAppend.Value);
             }
         }
     }

@@ -18,7 +18,8 @@ namespace Ex03.GarageLogic.Garage
             const string k_TryParseMethodName = "TryParse";
             const int k_OutParameterIndex = 1;
             T propertyValue = default;
-            MethodInfo tryParseMethod = typeof(T).GetMethod(k_TryParseMethodName);
+            Type[] tryParseTypes = { typeof(string), typeof(T).MakeByRefType() };
+            MethodInfo tryParseMethod = typeof(T).GetMethod(k_TryParseMethodName, tryParseTypes);
             bool isTParsable = tryParseMethod != null;
 
             if (isTParsable)

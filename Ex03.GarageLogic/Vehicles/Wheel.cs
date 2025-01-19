@@ -79,6 +79,22 @@ namespace Ex03.GarageLogic.Vehicles
             CurrentAirPressureLevel = currentAirPressureLevel;
         }
 
+        public Dictionary<string, string> GetDetails(int i_WheelNumber)
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+            string wheelNumberPrefix = $"Wheel {i_WheelNumber} ";
+
+            detailsDictionary.Add(wheelNumberPrefix + nameof(ManufacturerName), ManufacturerName);
+            detailsDictionary.Add(
+                wheelNumberPrefix + nameof(CurrentAirPressureLevel),
+                CurrentAirPressureLevel.ToString());
+            detailsDictionary.Add(
+                wheelNumberPrefix + nameof(MaximumAirPressureLevel),
+                MaximumAirPressureLevel.ToString());
+
+            return detailsDictionary;
+        }
+
         private void throwExceptionForAirPressureOutOfRange()
         {
             ValueOutOfRangeException valueOutOfRangeException = new ValueOutOfRangeException();

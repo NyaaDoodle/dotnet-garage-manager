@@ -40,7 +40,7 @@ namespace Ex03.GarageLogic.Vehicles
 
             if (inputType == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("This vehicle type cannot be created");
             }
 
             return inputType;
