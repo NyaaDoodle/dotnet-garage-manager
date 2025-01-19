@@ -7,10 +7,42 @@ namespace Ex03.GarageLogic.Vehicles
     internal class GasolineBasedMotorcycle : Motorcycle
     {
         public GasolineFuelTank FuelTank { get; set; }
+        public eFuelType FuelTypeInTank
+        {
+            get
+            {
+                return FuelTank.FuelTypeInTank;
+            }
+        }
+
+        public float CurrentFuelAmountInLiters
+        {
+            get
+            {
+                return FuelTank.CurrentFuelAmountInLiters;
+            }
+            set
+            {
+                FuelTank.CurrentFuelAmountInLiters = value;
+            }
+        }
+
+        public float MaximumFuelAmountInLiters
+        {
+            get
+            {
+                return FuelTank.MaximumFuelAmountInLiters;
+            }
+        }
 
         public GasolineBasedMotorcycle()
         {
             FuelTank = getInitialMotorcycleFuelTank();
+        }
+
+        public void FuelUp(float i_FuelAmountToAddInLiters, eFuelType i_FuelType)
+        {
+            FuelTank.FuelUp(i_FuelAmountToAddInLiters, i_FuelType);
         }
 
         public override ICollection<string> GetDefiningPropertiesNames()

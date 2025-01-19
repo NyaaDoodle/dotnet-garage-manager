@@ -8,9 +8,34 @@ namespace Ex03.GarageLogic.Vehicles
     {
         public ElectricVehicleBattery Battery { get; set; }
 
+        public float ChargeTimeLeftInHours
+        {
+            get
+            {
+                return Battery.ChargeTimeLeftInHours;
+            }
+            set
+            {
+                Battery.ChargeTimeLeftInHours = value;
+            }
+        }
+
+        public float MaximumChargeTimeInHours
+        {
+            get
+            {
+                return Battery.MaximumChargeTimeInHours;
+            }
+        }
+
         public ElectricCar()
         {
             Battery = getInitialCarBattery();
+        }
+
+        public void Charge(float i_ChargeTimeToAddInHours)
+        {
+            Battery.Charge(i_ChargeTimeToAddInHours);
         }
 
         public override ICollection<string> GetDefiningPropertiesNames()

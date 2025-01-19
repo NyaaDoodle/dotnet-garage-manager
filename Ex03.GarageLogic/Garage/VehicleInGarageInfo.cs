@@ -45,5 +45,15 @@ namespace Ex03.GarageLogic.Garage
             OwnerPhoneNumber = ownerPhoneNumberValue;
             Vehicle.SetDefiningProperties(i_DefiningPropertiesDictionary);
         }
+
+        public Dictionary<string, string> GetVehicleDetails()
+        {
+            Dictionary<string, string> detailsDictionary = new Dictionary<string, string>();
+
+            detailsDictionary.Add(nameof(OwnerName), OwnerName);
+            detailsDictionary.Add(nameof(OwnerPhoneNumber), OwnerPhoneNumber);
+            detailsDictionary.Add(nameof(RepairState), RepairState.ToString());
+
+        }
     }
 }

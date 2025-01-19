@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Ex03.GarageLogic.Vehicles;
 
 namespace Ex03.GarageLogic.Garage
@@ -96,30 +97,73 @@ namespace Ex03.GarageLogic.Garage
             eFuelType i_FuelType,
             float i_FuelAmountToAdd)
         {
+            const string k_FuelUpMethodName = "FuelUp";
             VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
-            bool isVehicleGasolineBased = vehicleInGarageInfo.Vehicle is GasolineBasedCar;
-            if (isVehicleGasolineBased)
+            Vehicle vehicleInGarage = vehicleInGarageInfo.Vehicle;
+            bool isGasolineBased = isVehicleGasolineBased(vehicleInGarage);
+            if (isGasolineBased)
             {
-
+                MethodInfo fuelUpMethod = vehicleInGarage.GetType().GetMethod(k_FuelUpMethodName);
+                if (fuelUpMethod != null)
+                {
+                    object[] fuelUpParameters = { i_FuelAmountToAdd, i_FuelType };
+                    fuelUpMethod.Invoke(vehicleInGarage, fuelUpParameters);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
             else
             {
-                // TODO turn to method
-                throw new InvalidOperationException();
+                throw new ArgumentException();
             }
         }
 
         public void ChargeElectricVehicleInGarage(string i_RegistrationPlateId, float i_ChargeTimeToAddInMinutes)
         {
+            const string k_ChargeMethodName = "Charge";
             float chargeTimeToAddInHours = i_ChargeTimeToAddInMinutes / 60;
+            VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
+            Vehicle vehicleInGarage = vehicleInGarageInfo.Vehicle;
+            bool isElectricBased = isVehicleElectricBased(vehicleInGarage);
+            if (isElectricBased)
+            {
+                MethodInfo chargeMethod = vehicleInGarage.GetType().GetMethod(k_ChargeMethodName);
+                if (chargeMethod != null)
+                {
+                    object[] chargeParameters = { i_ChargeTimeToAddInMinutes };
+                    chargeMethod.Invoke(vehicleInGarage, chargeParameters);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public Dictionary<string, string> GetSpecificVehicleInGarageDetails(string i_RegistrationPlateId)
+        {
+            VehicleInGarageInfo vehicleInGarageInfo = getVehicleInfo(i_RegistrationPlateId);
 
         }
 
-        // TODO decide on return datatype
-        public void getSpecificVehicleInGarageDetails(string i_RegistrationPlateId)
+        private static bool isVehicleGasolineBased(Vehicle i_Vehicle)
         {
-            VehicleInGarageInfo vehicleInGarage = getVehicleInfo(i_RegistrationPlateId);
+            const string k_GasolineFuelTankName = nameof(GasolineFuelTank);
 
+            return i_Vehicle.GetType().GetProperty(k_GasolineFuelTankName) != null;
+        }
+
+        private static bool isVehicleElectricBased(Vehicle i_Vehicle)
+        {
+            const string k_ElectricVehicleBatteryName = nameof(ElectricVehicleBattery);
+
+            return i_Vehicle.GetType().GetProperty(k_ElectricVehicleBatteryName) != null;
         }
 
         private VehicleInGarageInfo getVehicleInfo(string i_RegistrationPlateId)
